@@ -21,7 +21,7 @@
                         <div class="absolute top-4 left-4 z-10">
                             <span class="text-white px-3 py-1 rounded-lg font-black text-[7px] uppercase tracking-widest"
                                 style="background: rgba(201,168,76,0.25); border: 1px solid rgba(201,168,76,0.3); backdrop-filter: blur(8px);">
-                                Peragaan Isyarat
+                                Peragaan Isyarataaa
                             </span>
                         </div>
                         <div class="relative bg-black rounded-[1.6rem] overflow-hidden aspect-video flex items-center justify-center h-full">
