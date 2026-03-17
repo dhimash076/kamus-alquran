@@ -16,7 +16,7 @@
                         class="text-xs font-black uppercase tracking-widest transition-all duration-300 pb-0.5"
                         style="{{ request()->routeIs('homepage') ? 'color: #c9a84c; border-bottom: 2px solid #c9a84c;' : 'color: rgba(255,255,255,0.45); border-bottom: 2px solid transparent;' }}"
                         onmouseover="this.style.color='#c9a84c';" onmouseout="this.style.color='{{ request()->routeIs('homepage') ? '#c9a84c' : 'rgba(255,255,255,0.45)' }}';">
-                        Beranda
+                        Berandaaaaaaa
                     </a>
                     
                     @auth
