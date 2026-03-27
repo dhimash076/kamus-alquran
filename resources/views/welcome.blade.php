@@ -33,7 +33,7 @@
                         onfocus="this.style.background='rgba(255,255,255,0.12)'; this.style.borderColor='rgba(201,168,76,0.5)';"
                         onblur="this.style.background='rgba(255,255,255,0.08)'; this.style.borderColor='rgba(201,168,76,0.2)';"
                         autocomplete="off">
-                    <div class="absolute left-6 top-5.5 transition-colors" style="color: rgba(201,168,76,0.5);">
+                    <div class="absolute left-6 top-0 bottom-0 flex items-center transition-colors" style="color: rgba(201,168,76,0.5);">
                         <i class="fas fa-search text-xl"></i>
                     </div>
                     <button type="submit"

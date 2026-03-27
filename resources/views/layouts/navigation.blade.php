@@ -16,7 +16,7 @@
                         class="text-xs font-black uppercase tracking-widest transition-all duration-300 pb-0.5"
                         style="{{ request()->routeIs('homepage') ? 'color: #c9a84c; border-bottom: 2px solid #c9a84c;' : 'color: rgba(255,255,255,0.45); border-bottom: 2px solid transparent;' }}"
                         onmouseover="this.style.color='#c9a84c';" onmouseout="this.style.color='{{ request()->routeIs('homepage') ? '#c9a84c' : 'rgba(255,255,255,0.45)' }}';">
-                        Berandaaaaaaa
+                        Beranda
                     </a>
                     
                     @auth
@@ -89,6 +89,49 @@
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16M4 18h16" /></svg>
                 </button>
             </div>
+        </div>
+    </div>
+
+    {{-- Mobile Menu --}}
+    <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="sm:hidden" style="background: #0f2318; border-top: 1px solid rgba(201,168,76,0.15);">
+        <div class="px-4 py-4 space-y-2">
+            <a href="{{ route('homepage') }}" class="block px-4 py-3 rounded-xl font-black uppercase text-xs tracking-widest transition-all"
+                style="{{ request()->routeIs('homepage') ? 'color: #c9a84c; background: rgba(201,168,76,0.1);' : 'color: rgba(255,255,255,0.6);' }}">
+                Beranda
+            </a>
+
+            @auth
+                @if(auth()->user()->role === 'admin')
+                    <a href="{{ route('admin.index') }}" class="block px-4 py-3 rounded-xl font-black uppercase text-xs tracking-widest transition-all"
+                        style="color: #c9a84c; background: rgba(201,168,76,0.08);">
+                        <i class="fas fa-shield-alt mr-2"></i>Dashboard Admin
+                    </a>
+                @endif
+
+                <div class="pt-2 mt-2" style="border-top: 1px solid rgba(201,168,76,0.1);">
+                    <div class="px-4 py-2 text-[10px] font-black uppercase tracking-widest" style="color: rgba(201,168,76,0.4);">
+                        {{ Auth::user()->name }} — {{ Auth::user()->role }}
+                    </div>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="w-full text-left px-4 py-3 rounded-xl font-black uppercase text-xs tracking-widest transition-all"
+                            style="color: #e07070;">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Log Out
+                        </button>
+                    </form>
+                </div>
+            @else
+                <div class="flex gap-3 pt-2 mt-2 px-4" style="border-top: 1px solid rgba(201,168,76,0.1);">
+                    <a href="{{ route('login') }}" class="flex-1 text-center py-3 rounded-xl font-black uppercase text-[10px] tracking-widest transition-all"
+                        style="color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.1);">
+                        Masuk
+                    </a>
+                    <a href="{{ route('register') }}" class="flex-1 text-center py-3 rounded-xl font-black uppercase text-[10px] tracking-widest transition-all"
+                        style="background: linear-gradient(135deg, #c9a84c, #a07830); color: #0f2318;">
+                        Daftar
+                    </a>
+                </div>
+            @endauth
         </div>
     </div>
 </nav>
