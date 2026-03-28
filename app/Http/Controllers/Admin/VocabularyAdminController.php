@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Vocabulary;
-use App\Models\Category;
+
 use App\Models\Feedback;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -12,14 +12,13 @@ use Illuminate\Support\Facades\Storage;
 class VocabularyAdminController extends Controller 
 {
     public function index() {
-        $vocabularies = Vocabulary::with('category')->latest()->get();
+        $vocabularies = Vocabulary::latest()->get();
         $feedbacks = Feedback::with(['user', 'vocabulary'])->latest()->get();
         return view('admin.index', compact('vocabularies', 'feedbacks'));
     }
 
     public function create() {
-        $categories = Category::all();
-        return view('admin.create', compact('categories'));
+        return view('admin.create');
     }
 
     public function store(Request $request) {
@@ -28,12 +27,11 @@ class VocabularyAdminController extends Controller
         'arabic' => 'required',
         'transliteration' => 'required',
         'meaning' => 'required',
-        'category_id' => 'required|exists:categories,id', // Pastikan ID kategori valid
-        'video' => 'nullable|mimes:mp4,mov|max:50000', // Batas 50MB
+        'video' => 'nullable|mimes:mp4,mov|max:50000',
     ]);
 
     try {
-        $data = $request->only(['arabic', 'transliteration', 'meaning', 'category_id']);
+        $data = $request->only(['arabic', 'transliteration', 'meaning']);
 
         if ($request->hasFile('video')) {
             $data['video_path'] = $request->file('video')->store('videos', 'public');
@@ -49,19 +47,17 @@ class VocabularyAdminController extends Controller
 
     public function edit($id) {
         $vocabulary = Vocabulary::findOrFail($id);
-        $categories = Category::all();
-        return view('admin.edit', compact('vocabulary', 'categories'));
+        return view('admin.edit', compact('vocabulary'));
     }
 
     public function update(Request $request, $id) {
         $item = Vocabulary::findOrFail($id);
         $request->validate([
             'arabic' => 'required',
-            'category_id' => 'required|exists:categories,id',
             'video' => 'nullable|mimes:mp4,mov|max:20000',
         ]);
 
-        $data = $request->only(['arabic', 'transliteration', 'meaning', 'category_id']);
+        $data = $request->only(['arabic', 'transliteration', 'meaning']);
         if ($request->hasFile('video')) {
             if ($item->video_path) Storage::disk('public')->delete($item->video_path);
             $data['video_path'] = $request->file('video')->store('videos', 'public');

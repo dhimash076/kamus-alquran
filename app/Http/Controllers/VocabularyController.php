@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vocabulary;
-use App\Models\Category;
 use Illuminate\Http\Request;
 
 class VocabularyController extends Controller
@@ -16,13 +15,7 @@ class VocabularyController extends Controller
     {
         $search = $request->get('search');
 
-        // Mengambil semua kategori untuk ditampilkan di navigasi atau filter
-        $categories = Category::all();
-
-        // Logika: Jika ada input search, cari berdasarkan Arab, Arti, atau Transliterasi.
-        // Jika kosong, tampilkan semua kosa kata dari yang terbaru.
-        $results = Vocabulary::with('category')
-            ->when($search, function ($query, $search) {
+        $results = Vocabulary::when($search, function ($query, $search) {
                 return $query->where('arabic', 'like', "%{$search}%")
                              ->orWhere('meaning', 'like', "%{$search}%")
                              ->orWhere('transliteration', 'like', "%{$search}%");
@@ -31,7 +24,7 @@ class VocabularyController extends Controller
             })
             ->paginate(12);
 
-        return view('welcome', compact('results', 'categories'));
+        return view('welcome', compact('results'));
     }
 
     /**
@@ -41,7 +34,7 @@ class VocabularyController extends Controller
     public function show($id)
     {
         // Mencari kosa kata beserta kategorinya, jika tidak ketemu akan muncul error 404
-        $vocabulary = Vocabulary::with('category')->findOrFail($id);
+        $vocabulary = Vocabulary::findOrFail($id);
         
         return view('detail', compact('vocabulary'));
     }

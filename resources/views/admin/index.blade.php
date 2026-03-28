@@ -39,7 +39,7 @@
                     <thead>
                         <tr style="background: linear-gradient(135deg, #1a3a2a, #0f2318);">
                             <th class="p-5 font-black tracking-widest text-[10px] uppercase" style="color: rgba(201,168,76,0.8);">Arab</th>
-                            <th class="p-5 font-black tracking-widest text-[10px] uppercase" style="color: rgba(201,168,76,0.8);">Arti & Kategori</th>
+                            <th class="p-5 font-black tracking-widest text-[10px] uppercase" style="color: rgba(201,168,76,0.8);">Arti</th>
                             <th class="p-5 font-black tracking-widest text-[10px] uppercase text-center" style="color: rgba(201,168,76,0.8);">Aksi</th>
                         </tr>
                     </thead>
@@ -57,10 +57,7 @@
                                 <span class="text-[10px] font-black uppercase tracking-widest italic mr-1" style="color: #c9a84c;">
                                     {{ $v->transliteration }}
                                 </span>
-                                <span class="inline-block px-3 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest"
-                                    style="background: rgba(26,58,42,0.07); color: #1a3a2a;">
-                                    {{ $v->category->name ?? 'Tanpa Kategori' }}
-                                </span>
+
                             </td>
                             <td class="p-6 text-center">
                                 <div class="flex justify-center gap-2">

@@ -67,20 +67,7 @@
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block font-black uppercase text-[9px] mb-2 tracking-[0.3em]" style="color: #a07830;">Kategori</label>
-                        <select name="category_id" class="w-full rounded-2xl p-4 font-bold outline-none transition-all"
-                            style="border: 2px solid #f0e6cc; background: #fdf9f2; color: #1c2e1c;"
-                            onfocus="this.style.borderColor='#c9a84c'; this.style.background='#fff';"
-                            onblur="this.style.borderColor='#f0e6cc'; this.style.background='#fdf9f2';"
-                            required>
-                            @foreach($categories as $cat)
-                                <option value="{{ $cat->id }}" {{ $vocabulary->category_id == $cat->id ? 'selected' : '' }}>
-                                    {{ strtoupper($cat->name) }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+
 
                     <div>
                         <label class="block font-black uppercase text-[9px] mb-2 tracking-[0.3em]" style="color: #a07830;">Ganti Video (Opsional)</label>

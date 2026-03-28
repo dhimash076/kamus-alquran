@@ -89,12 +89,8 @@
                     <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight leading-tight" style="color: #1a3a2a;">
                         {{ $vocabulary->meaning }}
                     </h2>
-                    <div class="pt-2">
-                        <span class="text-[8px] font-black px-3 py-1 rounded-full uppercase tracking-widest"
-                            style="background: rgba(26,58,42,0.08); color: #1a3a2a; border: 1px solid rgba(26,58,42,0.1);">
-                            Kategori: {{ $vocabulary->category->name ?? 'Umum' }}
-                        </span>
-                    </div>
+
+
                 </div>
 
                 <div class="flex items-center gap-8">

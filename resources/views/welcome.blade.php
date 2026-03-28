@@ -61,11 +61,7 @@
                             style="border: 1.5px solid #f0e6cc;">
                             
                             <div>
-                                <div class="flex justify-between items-center mb-6">
-                                    <span class="text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full"
-                                        style="color: #1a3a2a; background: rgba(26,58,42,0.08);">
-                                        {{ $item->category->name ?? 'UMUM' }}
-                                    </span>
+                                <div class="flex justify-end items-center mb-6">
                                     <i class="fas fa-mosque text-sm transition-colors" style="color: #e8d9b5;"></i>
                                 </div>
 
