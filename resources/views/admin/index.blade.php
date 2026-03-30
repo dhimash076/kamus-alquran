@@ -57,7 +57,12 @@
                                 <span class="text-[10px] font-black uppercase tracking-widest italic mr-1" style="color: #c9a84c;">
                                     {{ $v->transliteration }}
                                 </span>
-
+                                @if($v->category)
+                                    <span class="inline-block mt-2 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest"
+                                        style="background: rgba(201,168,76,0.12); color: #a07830;">
+                                        {{ $v->category->name }}
+                                    </span>
+                                @endif
                             </td>
                             <td class="p-6 text-center">
                                 <div class="flex justify-center gap-2">

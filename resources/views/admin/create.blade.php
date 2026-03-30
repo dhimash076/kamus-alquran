@@ -37,6 +37,20 @@
                     @csrf
                     
                     <div>
+                        <label class="block font-black uppercase text-[9px] mb-2 tracking-[0.3em]" style="color: #a07830;">Kategori</label>
+                        <select name="category_id" required
+                            class="w-full rounded-2xl p-4 font-bold outline-none transition-all appearance-none cursor-pointer"
+                            style="border: 2px solid #f0e6cc; background: #fdf9f2; color: #1c2e1c;"
+                            onfocus="this.style.borderColor='#c9a84c'; this.style.background='#fff';"
+                            onblur="this.style.borderColor='#f0e6cc'; this.style.background='#fdf9f2';">
+                            <option value="">— Pilih Kategori —</option>
+                            @foreach($categories as $cat)
+                                <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
                         <label class="block font-black uppercase text-[9px] mb-2 tracking-[0.3em]" style="color: #a07830;">Teks Arab</label>
                         <input type="text" name="arabic" value="{{ old('arabic') }}" placeholder="...أهلاً" 
                             class="w-full rounded-2xl p-5 text-4xl font-arabic text-right outline-none transition-all"
