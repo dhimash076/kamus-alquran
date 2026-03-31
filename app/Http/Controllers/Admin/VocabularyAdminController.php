@@ -36,7 +36,13 @@ class VocabularyAdminController extends Controller
         $data = $request->only(['category_id', 'arabic', 'transliteration', 'meaning']);
 
         if ($request->hasFile('video')) {
-            $data['video_path'] = $request->file('video')->store('videos', 'public');
+            // UBAH: Pindahkan video langsung ke folder public untuk bypass symlink
+            $video = $request->file('video');
+            $filename = time() . '_' . $video->getClientOriginalName();
+            // str_replace untuk membersihkan spasi di nama file
+            $filename = str_replace(' ', '_', $filename);
+            $video->move(public_path('storage/videos'), $filename);
+            $data['video_path'] = 'videos/' . $filename;
         }
 
         Vocabulary::create($data);
@@ -58,13 +64,25 @@ class VocabularyAdminController extends Controller
         $request->validate([
             'category_id' => 'required|exists:categories,id',
             'arabic' => 'required',
-            'video' => 'nullable|mimes:mp4,mov|max:20000',
+            'video' => 'nullable|mimes:mp4,mov|max:50000', // max upload disamakan 50MB
         ]);
 
         $data = $request->only(['category_id', 'arabic', 'transliteration', 'meaning']);
         if ($request->hasFile('video')) {
-            if ($item->video_path) Storage::disk('public')->delete($item->video_path);
-            $data['video_path'] = $request->file('video')->store('videos', 'public');
+            // Hapus file lama jika ada
+            if ($item->video_path) {
+                $old_path = public_path('storage/' . $item->video_path);
+                if (file_exists($old_path)) {
+                    unlink($old_path);
+                }
+            }
+            
+            // Simpan file baru langsung ke public
+            $video = $request->file('video');
+            $filename = time() . '_' . $video->getClientOriginalName();
+            $filename = str_replace(' ', '_', $filename);
+            $video->move(public_path('storage/videos'), $filename);
+            $data['video_path'] = 'videos/' . $filename;
         }
 
         $item->update($data);
@@ -73,7 +91,15 @@ class VocabularyAdminController extends Controller
 
     public function destroy($id) {
         $item = Vocabulary::findOrFail($id);
-        if ($item->video_path) Storage::disk('public')->delete($item->video_path);
+        
+        // Hapus file fisik
+        if ($item->video_path) {
+            $file_path = public_path('storage/' . $item->video_path);
+            if (file_exists($file_path)) {
+                unlink($file_path);
+            }
+        }
+        
         $item->delete();
         return redirect()->route('admin.index')->with('success', 'Data berhasil dihapus!');
     }
