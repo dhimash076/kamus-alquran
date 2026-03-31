@@ -7,11 +7,22 @@ use App\Http\Controllers\Admin\VocabularyAdminController;
 
 // --- JALUR DARURAT UNTUK HOSTING (HAPUS JIKA SUDAH BERHASIL) ---
 Route::get('/buat-symlink', function () {
+    $target = storage_path('app/public');
+    $link = public_path('storage');
+
+    // Jika symlink sudah ada
+    if (file_exists($link)) {
+        return 'SYMLINK SUDAH ADA. Tidak perlu dibuat ulang.';
+    }
+
     try {
-        \Illuminate\Support\Facades\Artisan::call('storage:link');
-        return 'SUKSES: Jembatan Storage Berhasil Dibuat di Server!';
+        // Coba buat symlink dengan PHP native (tanpa exec)
+        symlink($target, $link);
+        return 'SUKSES: Symlink berhasil dibuat! ' . $link . ' → ' . $target;
     } catch (\Exception $e) {
-        return 'GAGAL: ' . $e->getMessage();
+        // Jika symlink gagal, salin file secara manual sebagai alternatif
+        return 'GAGAL membuat symlink: ' . $e->getMessage() . 
+               '<br><br><strong>SOLUSI MANUAL:</strong> Upload isi folder <code>storage/app/public/</code> ke folder <code>public/storage/</code> di hosting via File Manager.';
     }
 });
 // -------------------------------------------------------------
