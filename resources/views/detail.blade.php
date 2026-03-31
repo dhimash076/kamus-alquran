@@ -21,13 +21,14 @@
                         <div class="absolute top-4 left-4 z-10">
                             <span class="text-white px-3 py-1 rounded-lg font-black text-[7px] uppercase tracking-widest"
                                 style="background: rgba(201,168,76,0.25); border: 1px solid rgba(201,168,76,0.3); backdrop-filter: blur(8px);">
-                                Peragaan Isyarataaa
+                                Peragaan Isyarat
                             </span>
                         </div>
                         <div class="relative bg-black rounded-[1.6rem] overflow-hidden aspect-video flex items-center justify-center h-full">
                             @if($vocabulary->video_path)
                                 <video class="w-full h-full object-cover" controls autoplay muted loop>
-                                    <source src="{{ asset('storage/' . $vocabulary->video_path) }}" type="video/mp4">
+                                    {{-- PERBAIKAN DI SINI: Membuang kata 'public/' dari database --}}
+                                    <source src="{{ asset('storage/' . str_replace('public/', '', $vocabulary->video_path)) }}" type="video/mp4">
                                 </video>
                             @else
                                 <div class="text-center p-6">
@@ -89,8 +90,6 @@
                     <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight leading-tight" style="color: #1a3a2a;">
                         {{ $vocabulary->meaning }}
                     </h2>
-
-
                 </div>
 
                 <div class="flex items-center gap-8">
