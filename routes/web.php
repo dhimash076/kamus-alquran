@@ -7,22 +7,39 @@ use App\Http\Controllers\Admin\VocabularyAdminController;
 
 // --- JALUR DARURAT UNTUK HOSTING (HAPUS JIKA SUDAH BERHASIL) ---
 Route::get('/buat-symlink', function () {
-    $target = storage_path('app/public');
-    $link = public_path('storage');
+    $source = storage_path('app/public');
+    $destination = public_path('storage');
 
-    // Jika symlink sudah ada
-    if (file_exists($link)) {
-        return 'SYMLINK SUDAH ADA. Tidak perlu dibuat ulang.';
+    // Fungsi rekursif untuk menyalin folder
+    function copyDirectory($src, $dst) {
+        $count = 0;
+        if (!is_dir($dst)) {
+            mkdir($dst, 0755, true);
+        }
+        $dir = opendir($src);
+        while (($file = readdir($dir)) !== false) {
+            if ($file === '.' || $file === '..') continue;
+            $srcPath = $src . '/' . $file;
+            $dstPath = $dst . '/' . $file;
+            if (is_dir($srcPath)) {
+                $count += copyDirectory($srcPath, $dstPath);
+            } else {
+                copy($srcPath, $dstPath);
+                $count++;
+            }
+        }
+        closedir($dir);
+        return $count;
     }
 
     try {
-        // Coba buat symlink dengan PHP native (tanpa exec)
-        symlink($target, $link);
-        return 'SUKSES: Symlink berhasil dibuat! ' . $link . ' → ' . $target;
+        if (!is_dir($source)) {
+            return 'GAGAL: Folder storage/app/public tidak ditemukan.';
+        }
+        $count = copyDirectory($source, $destination);
+        return "SUKSES: $count file berhasil disalin dari storage/app/public/ ke public/storage/";
     } catch (\Exception $e) {
-        // Jika symlink gagal, salin file secara manual sebagai alternatif
-        return 'GAGAL membuat symlink: ' . $e->getMessage() . 
-               '<br><br><strong>SOLUSI MANUAL:</strong> Upload isi folder <code>storage/app/public/</code> ke folder <code>public/storage/</code> di hosting via File Manager.';
+        return 'GAGAL: ' . $e->getMessage();
     }
 });
 // -------------------------------------------------------------
