@@ -5,6 +5,17 @@ use App\Http\Controllers\VocabularyController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Admin\VocabularyAdminController;
 
+// --- JALUR DARURAT UNTUK HOSTING (HAPUS JIKA SUDAH BERHASIL) ---
+Route::get('/buat-symlink', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        return 'SUKSES: Jembatan Storage Berhasil Dibuat di Server!';
+    } catch (\Exception $e) {
+        return 'GAGAL: ' . $e->getMessage();
+    }
+});
+// -------------------------------------------------------------
+
 // --- 1. AKSES PUBLIK ---
 Route::get('/', [VocabularyController::class, 'index'])->name('homepage');
 Route::get('/vocabulary/{id}', [VocabularyController::class, 'show'])->name('vocabulary.detail');
