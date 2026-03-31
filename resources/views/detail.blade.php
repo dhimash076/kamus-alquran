@@ -26,10 +26,58 @@
                         </div>
                         <div class="relative bg-black rounded-[1.6rem] overflow-hidden aspect-video flex items-center justify-center h-full">
                             @if($vocabulary->video_path)
-                                <video class="w-full h-full object-cover" controls autoplay muted loop>
-                                    {{-- PERBAIKAN DI SINI: Membuang kata 'public/' dari database --}}
-                                    <source src="{{ asset('storage/' . str_replace('public/', '', $vocabulary->video_path)) }}" type="video/mp4">
+                                <video id="videoPlayer" class="w-full h-full object-cover" controls muted loop playsinline preload="auto">
+                                    <source src="{{ asset('storage/' . $vocabulary->video_path) }}" type="video/mp4">
+                                    Browser Anda tidak mendukung tag video.
                                 </video>
+                                {{-- Tombol play manual sebagai fallback jika autoplay diblokir --}}
+                                <div id="playOverlay" class="absolute inset-0 flex items-center justify-center cursor-pointer z-10" style="background: rgba(0,0,0,0.4); display: none;">
+                                    <div class="w-16 h-16 rounded-full flex items-center justify-center transition-transform hover:scale-110" style="background: rgba(201,168,76,0.9);">
+                                        <i class="fas fa-play text-xl" style="color: #0f2318; margin-left: 3px;"></i>
+                                    </div>
+                                </div>
+                                {{-- Error message jika video gagal dimuat --}}
+                                <div id="videoError" class="absolute inset-0 flex items-center justify-center" style="display: none;">
+                                    <div class="text-center p-6">
+                                        <i class="fas fa-exclamation-triangle text-3xl mb-2" style="color: #c9a84c;"></i>
+                                        <p class="font-black uppercase text-[8px] tracking-widest" style="color: #c9a84c;">Video gagal dimuat</p>
+                                        <p class="text-[7px] mt-1" style="color: rgba(201,168,76,0.6);">Periksa koneksi atau format video</p>
+                                    </div>
+                                </div>
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        const video = document.getElementById('videoPlayer');
+                                        const overlay = document.getElementById('playOverlay');
+                                        const errorDiv = document.getElementById('videoError');
+
+                                        // Coba autoplay
+                                        const playPromise = video.play();
+                                        if (playPromise !== undefined) {
+                                            playPromise.catch(function() {
+                                                // Autoplay diblokir, tampilkan tombol play
+                                                overlay.style.display = 'flex';
+                                            });
+                                        }
+
+                                        // Klik overlay untuk play manual
+                                        overlay.addEventListener('click', function() {
+                                            video.play();
+                                            overlay.style.display = 'none';
+                                        });
+
+                                        // Sembunyikan overlay saat video mulai bermain
+                                        video.addEventListener('playing', function() {
+                                            overlay.style.display = 'none';
+                                        });
+
+                                        // Tampilkan error jika video gagal dimuat
+                                        video.addEventListener('error', function() {
+                                            video.style.display = 'none';
+                                            overlay.style.display = 'none';
+                                            errorDiv.style.display = 'flex';
+                                        });
+                                    });
+                                </script>
                             @else
                                 <div class="text-center p-6">
                                     <i class="fas fa-video-slash text-3xl mb-2" style="color: #2a4a3a;"></i>
